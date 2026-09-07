@@ -22,7 +22,7 @@ Abrir http://127.0.0.1:8000/
 
 ## Importante
 
-- **Sin base de datos** (Evaluación 1): los datos son mock en
+- **Sin base de datos:** los datos son mock en
   `fidelizacion/mock_data/*.json` y viven en memoria hasta reiniciar el
   servidor. No se ejecuta `migrate`.
 - Para verificar que todo funciona: `python manage.py test` (9 pruebas).
