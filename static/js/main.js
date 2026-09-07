@@ -29,6 +29,30 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  var modalEliminar = document.getElementById('modal-eliminar');
+  var modalNombre = document.getElementById('modal-eliminar-nombre');
+  var modalForm = document.getElementById('modal-eliminar-form');
+  document.querySelectorAll('[data-eliminar-url]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (!modalEliminar || !modalForm) return;
+      if (modalNombre) {
+        modalNombre.textContent = btn.getAttribute('data-eliminar-nombre');
+      }
+      modalForm.setAttribute('action', btn.getAttribute('data-eliminar-url'));
+      modalEliminar.classList.add('is-open');
+    });
+  });
+  document.querySelectorAll('[data-modal-cerrar]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (modalEliminar) modalEliminar.classList.remove('is-open');
+    });
+  });
+  if (modalEliminar) {
+    modalEliminar.addEventListener('click', function (e) {
+      if (e.target === modalEliminar) modalEliminar.classList.remove('is-open');
+    });
+  }
+
   var heroCard = document.querySelector('.viking-card');
   if (heroCard) {
     heroCard.style.opacity = '0';

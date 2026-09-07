@@ -125,7 +125,7 @@ def _generar_numero_tarjeta():
             return numero
 
 
-def crear_usuario(nombre, apellido, email, telefono, password):
+def crear_usuario(nombre, apellido, email, telefono, password, es_admin=False):
     """
     Crea (en memoria) una nueva cuenta VikingCard con saldo y puntos en cero.
     Equivale al "Create" del CRUD que en la Unidad 2 pasará a la base de datos.
@@ -136,6 +136,7 @@ def crear_usuario(nombre, apellido, email, telefono, password):
         "nombre": nombre.strip(),
         "apellido": apellido.strip(),
         "telefono": telefono.strip(),
+        "es_admin": bool(es_admin),
         "tarjeta_numero": _generar_numero_tarjeta(),
         "saldo": 0,
         "puntos": 0,
@@ -144,6 +145,33 @@ def crear_usuario(nombre, apellido, email, telefono, password):
     }
     USUARIOS.append(nuevo_usuario)
     return nuevo_usuario
+
+
+def actualizar_usuario(email, nombre, apellido, telefono):
+    """
+    Actualiza los datos personales de un usuario (equivale al "Update" del
+    CRUD). El email no se modifica porque es la llave de la cuenta.
+    Devuelve el usuario actualizado o None si no existe.
+    """
+    usuario = obtener_usuario(email)
+    if usuario is None:
+        return None
+    usuario["nombre"] = nombre.strip()
+    usuario["apellido"] = apellido.strip()
+    usuario["telefono"] = telefono.strip()
+    return usuario
+
+
+def eliminar_usuario(email):
+    """
+    Elimina un usuario de la lista en memoria (equivale al "Delete" del CRUD).
+    Devuelve True si se eliminó, False si no existía.
+    """
+    usuario = obtener_usuario(email)
+    if usuario is None:
+        return False
+    USUARIOS.remove(usuario)
+    return True
 
 
 def recargar_saldo(usuario, monto, metodo):

@@ -5,6 +5,7 @@
     "nombre": "Kristian",
     "apellido": "Soto",
     "telefono": "+56 9 1234 5678",
+    "es_admin": true,
     "tarjeta_numero": "4127",
     "saldo": 23500,
     "puntos": 340,

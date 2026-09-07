@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}{{ titulo }} — Vikingos Barber{% endblock %}
+
+{% block header %}
+  {% include "partials/header_app.html" %}
+{% endblock %}
+
+{% block content %}
+<main class="app-shell">
+  <div class="container" style="max-width:720px;">
+    <div class="section-head" style="margin-bottom:24px;">
+      <h2>{{ titulo }}</h2>
+      {% if es_creacion %}
+        <p>Completa los datos para crear una nueva cuenta VikingCard.</p>
+      {% else %}
+        <p>Modifica los datos personales del cliente. El correo no se puede cambiar porque es la llave de la cuenta.</p>
+      {% endif %}
+    </div>
+
+    <div class="panel">
+      {% if form.non_field_errors %}
+        <div class="alert alert-error">
+          {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+        </div>
+      {% endif %}
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="field-row">
+          <div class="field" style="margin-top:0;">
+            <label for="{{ form.nombre.id_for_label }}">{{ form.nombre.label }}</label>
+            {{ form.nombre|add_error_class:"is-invalid" }}
+            {% for error in form.nombre.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+          </div>
+          <div class="field" style="margin-top:0;">
+            <label for="{{ form.apellido.id_for_label }}">{{ form.apellido.label }}</label>
+            {{ form.apellido|add_error_class:"is-invalid" }}
+            {% for error in form.apellido.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+          </div>
+        </div>
+
+        {% if es_creacion %}
+          <div class="field">
+            <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+            {{ form.email|add_error_class:"is-invalid" }}
+            {% for error in form.email.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+          </div>
+        {% else %}
+          <div class="field">
+            <label>Correo electrónico</label>
+            <p class="text-muted">{{ cliente.email }}</p>
+          </div>
+        {% endif %}
+
+        <div class="field-row">
+          <div class="field">
+            <label for="{{ form.telefono.id_for_label }}">{{ form.telefono.label }}</label>
+            {{ form.telefono|add_error_class:"is-invalid" }}
+            {% for error in form.telefono.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+          </div>
+          {% if es_creacion %}
+            <div class="field">
+              <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+              {{ form.password|add_error_class:"is-invalid" }}
+              {% if form.password.help_text %}<p class="field-hint">{{ form.password.help_text }}</p>{% endif %}
+              {% for error in form.password.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+            </div>
+          {% endif %}
+        </div>
+
+        {% if es_creacion %}
+          <div class="field-check">
+            {{ form.es_admin }}
+            <label for="{{ form.es_admin.id_for_label }}" style="margin:0;">{{ form.es_admin.label }}</label>
+          </div>
+        {% endif %}
+
+        <div style="display:flex; gap:12px; margin-top:32px;">
+          <button type="submit" class="btn btn-primary" style="flex:1;">{{ texto_boton }}</button>
+          <a href="{% url 'fidelizacion:usuarios' %}" class="btn btn-ghost" style="flex:1;">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}

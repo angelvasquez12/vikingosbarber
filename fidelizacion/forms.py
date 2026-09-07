@@ -79,6 +79,54 @@ class RegistroForm(forms.Form):
         return cleaned_data
 
 
+class UsuarioCrearForm(forms.Form):
+    """Formulario de la sección Administración para crear cuentas de clientes."""
+
+    nombre = forms.CharField(
+        label="Nombre",
+        max_length=60,
+        widget=forms.TextInput(attrs={"placeholder": "Kristian"}),
+    )
+    apellido = forms.CharField(
+        label="Apellido",
+        max_length=60,
+        widget=forms.TextInput(attrs={"placeholder": "Soto"}),
+    )
+    email = forms.EmailField(
+        label="Correo electrónico",
+        widget=forms.EmailInput(attrs={"placeholder": "cliente@correo.com"}),
+    )
+    telefono = forms.CharField(
+        label="Teléfono",
+        max_length=20,
+        widget=forms.TextInput(attrs={"placeholder": "+56 9 1234 5678"}),
+    )
+    password = forms.CharField(
+        label="Contraseña inicial",
+        min_length=8,
+        widget=forms.PasswordInput(attrs={"placeholder": "••••••••"}),
+        help_text="Mínimo 8 caracteres.",
+    )
+    es_admin = forms.BooleanField(
+        label="Otorgar permisos de administración",
+        required=False,
+    )
+
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip().lower()
+        if data.existe_usuario(email):
+            raise forms.ValidationError("Ya existe una cuenta VikingCard con este correo.")
+        return email
+
+
+class UsuarioEditarForm(forms.Form):
+    """Formulario de la sección Administración para editar datos de un cliente."""
+
+    nombre = forms.CharField(label="Nombre", max_length=60)
+    apellido = forms.CharField(label="Apellido", max_length=60)
+    telefono = forms.CharField(label="Teléfono", max_length=20)
+
+
 class RecargaForm(forms.Form):
     METODOS = [
         ("tarjeta", "Tarjeta de débito o crédito"),

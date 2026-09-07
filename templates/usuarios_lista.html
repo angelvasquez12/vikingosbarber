@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load vikingcard_extras %}
+
+{% block title %}Administración de clientes — Vikingos Barber{% endblock %}
+
+{% block header %}
+  {% include "partials/header_app.html" %}
+{% endblock %}
+
+{% block content %}
+<main class="app-shell">
+  <div class="container">
+    <div class="section-head" style="margin-bottom:24px;">
+      <h2>Administración de clientes</h2>
+      <p>Crear, editar y eliminar cuentas VikingCard. Solo visible para administradores.</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card"><b>{{ stats.total_clientes }}</b><span>clientes registrados</span></div>
+      <div class="stat-card"><b>{{ stats.saldo_total|clp }}</b><span>saldo total en tarjetas</span></div>
+      <div class="stat-card"><b>{{ stats.puntos_totales }}</b><span>puntos acumulados</span></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Clientes ({{ clientes|length }})</h2>
+        <a href="{% url 'fidelizacion:usuario_nuevo' %}" class="btn btn-primary btn-sm">Nuevo cliente</a>
+      </div>
+
+      <form method="get" class="filters">
+        <input type="text" name="q" value="{{ filtros.q }}" placeholder="Buscar por nombre o email..." aria-label="Buscar cliente">
+        <select name="nivel" aria-label="Filtrar por nivel" onchange="this.form.submit()">
+          <option value="">Todos los niveles</option>
+          {% for nivel in niveles %}
+            <option value="{{ nivel.id }}" {% if filtros.nivel == nivel.id %}selected{% endif %}>{{ nivel.nombre }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-ghost btn-sm">Buscar</button>
+        {% if filtros.q or filtros.nivel %}
+          <a href="{% url 'fidelizacion:usuarios' %}" class="btn btn-ghost btn-sm">Limpiar</a>
+        {% endif %}
+      </form>
+
+      <div class="table-wrap">
+        <table class="tx-table">
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th>Tarjeta</th>
+              <th>Saldo</th>
+              <th>Puntos</th>
+              <th>Nivel</th>
+              <th class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for cliente in clientes %}
+              <tr>
+                <td>
+                  <span class="app-user-avatar" style="display:inline-flex; width:32px; height:32px; font-size:0.75rem; margin-right:10px; vertical-align:middle;">{{ cliente.iniciales }}</span>{{ cliente.nombre_completo }}
+                  {% if cliente.es_admin %}<span class="badge badge-pending" style="margin-left:8px;">Admin</span>{% endif %}
+                </td>
+                <td>{{ cliente.email }}</td>
+                <td>{{ cliente.telefono }}</td>
+                <td>•••• {{ cliente.tarjeta_numero }}</td>
+                <td>{{ cliente.saldo|clp }}</td>
+                <td>{{ cliente.puntos }}</td>
+                <td>{{ cliente.nivel }}</td>
+                <td class="text-center" style="white-space:nowrap;">
+                  <a href="{% url 'fidelizacion:usuario_editar' cliente.email %}" class="btn btn-ghost btn-sm">Editar</a>
+                  <button type="button" class="btn btn-danger btn-sm" data-eliminar-url="{% url 'fidelizacion:usuario_eliminar' cliente.email %}" data-eliminar-nombre="{{ cliente.nombre_completo }}">Eliminar</button>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="8" class="text-muted" style="text-align:center; padding:32px 16px;">
+                  No hay clientes que coincidan con la búsqueda.
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="modal-backdrop" id="modal-eliminar">
+  <div class="modal-card">
+    <h3>Confirmar eliminación</h3>
+    <p>¿Eliminar al cliente <b id="modal-eliminar-nombre"></b>? Esta acción no se puede deshacer.</p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" data-modal-cerrar>Cancelar</button>
+      <form id="modal-eliminar-form" method="post" style="flex:1; display:flex;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger-solid btn-block">Eliminar</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -22,4 +22,17 @@ urlpatterns = [
     path("cuenta/", views.dashboard, name="dashboard"),
     path("cuenta/recargar/", views.recargar, name="recargar"),
     path("cuenta/transacciones/", views.transacciones, name="transacciones"),
+
+    path("administracion/usuarios/", views.usuarios_lista, name="usuarios"),
+    path("administracion/usuarios/nuevo/", views.usuario_nuevo, name="usuario_nuevo"),
+    path(
+        "administracion/usuarios/<str:email>/editar/",
+        views.usuario_editar,
+        name="usuario_editar",
+    ),
+    path(
+        "administracion/usuarios/<str:email>/eliminar/",
+        views.usuario_eliminar,
+        name="usuario_eliminar",
+    ),
 ]

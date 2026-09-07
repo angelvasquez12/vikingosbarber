@@ -18,14 +18,23 @@ python manage.py runserver
 
 Abrir http://127.0.0.1:8000/
 
-**Cuenta demo:** `kristian@vikingosbarber.cl` / `vikingo123`
+**Cuenta demo (administradora):** `kristian@vikingosbarber.cl` / `vikingo123`
+
+## Administración de clientes
+
+Solo visible para administradores (pestaña **Administración**):
+lista con buscador y filtro por nivel, crear, editar y eliminar
+clientes. Ruta: `/administracion/usuarios/`. Inspirada en el template
+de referencia
+[Library-for-everyone](https://github.com/cafeycodigo/Library-for-everyone-template),
+pero con backend Django real en vez de datos falsos en JS.
 
 ## Importante
 
 - **Sin base de datos:** los datos son mock en
   `fidelizacion/mock_data/*.json` y viven en memoria hasta reiniciar el
   servidor. No se ejecuta `migrate`.
-- Para verificar que todo funciona: `python manage.py test` (9 pruebas).
+- Para verificar que todo funciona: `python manage.py test` (17 pruebas).
 
 ## Estructura
 

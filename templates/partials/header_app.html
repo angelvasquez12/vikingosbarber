@@ -23,5 +23,8 @@
     <a href="{% url 'fidelizacion:recargar' %}" class="app-tab {% if activo == 'recargar' %}is-active{% endif %}">Recargar saldo</a>
     <a href="{% url 'fidelizacion:transacciones' %}" class="app-tab {% if activo == 'transacciones' %}is-active{% endif %}">Transacciones</a>
     <a href="{% url 'fidelizacion:servicios' %}" class="app-tab {% if activo == 'servicios' %}is-active{% endif %}">Servicios</a>
+    {% if usuario.es_admin %}
+      <a href="{% url 'fidelizacion:usuarios' %}" class="app-tab {% if activo == 'usuarios' %}is-active{% endif %}">Administración</a>
+    {% endif %}
   </div>
 </nav>

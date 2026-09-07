@@ -14,8 +14,16 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
+from django.http import Http404
+
 from . import data
-from .forms import LoginForm, RecargaForm, RegistroForm
+from .forms import (
+    LoginForm,
+    RecargaForm,
+    RegistroForm,
+    UsuarioCrearForm,
+    UsuarioEditarForm,
+)
 
 SESSION_KEY = "usuario_email"
 
@@ -40,9 +48,36 @@ def requiere_sesion(vista):
     return envoltura
 
 
+def requiere_admin(vista):
+    """Como requiere_sesion, pero además exige el flag es_admin del usuario."""
+    @wraps(vista)
+    def envoltura(request, *args, **kwargs):
+        email = request.session.get(SESSION_KEY)
+        usuario = data.obtener_usuario(email) if email else None
+        if usuario is None:
+            messages.warning(request, "Debes iniciar sesión para continuar.")
+            url_login = reverse("fidelizacion:login")
+            return redirect(f"{url_login}?next={request.path}")
+        if not usuario.get("es_admin", False):
+            messages.warning(request, "No tienes permisos de administración.")
+            return redirect("fidelizacion:dashboard")
+        request.usuario = usuario
+        request.nivel_info = data.calcular_nivel(usuario["puntos"])
+        return vista(request, *args, **kwargs)
+
+    return envoltura
+
+
 def _usuario_actual(request):
     email = request.session.get(SESSION_KEY)
     return data.obtener_usuario(email) if email else None
+
+
+def _usuario_o_404(email):
+    usuario = data.obtener_usuario(email)
+    if usuario is None:
+        raise Http404("El cliente no existe.")
+    return usuario
 
 
 # ---------------------------------------------------------------------------
@@ -197,3 +232,138 @@ def transacciones(request):
         "filtros": {"tipo": tipo, "sucursal": sucursal, "desde": desde},
     }
     return render(request, "transacciones.html", contexto)
+
+
+# ---------------------------------------------------------------------------
+# Administración de clientes (CRUD en memoria, solo para administradores)
+# ---------------------------------------------------------------------------
+@requiere_admin
+def usuarios_lista(request):
+    clientes = []
+    for usuario in data.USUARIOS:
+        nivel = data.calcular_nivel(usuario["puntos"])["actual"]
+        clientes.append({
+            "nombre_completo": f"{usuario['nombre']} {usuario['apellido']}",
+            "iniciales": f"{usuario['nombre'][:1]}{usuario['apellido'][:1]}".upper(),
+            "email": usuario["email"],
+            "telefono": usuario["telefono"],
+            "es_admin": usuario.get("es_admin", False),
+            "tarjeta_numero": usuario["tarjeta_numero"],
+            "saldo": usuario["saldo"],
+            "puntos": usuario["puntos"],
+            "nivel_id": nivel["id"],
+            "nivel": nivel["nombre"],
+            "num_movimientos": len(usuario["movimientos"]),
+        })
+
+    stats = {
+        "total_clientes": len(clientes),
+        "saldo_total": sum(c["saldo"] for c in clientes),
+        "puntos_totales": sum(c["puntos"] for c in clientes),
+    }
+
+    termino = request.GET.get("q", "").strip().lower()
+    nivel_id = request.GET.get("nivel", "")
+    if termino:
+        clientes = [
+            c for c in clientes
+            if termino in c["nombre_completo"].lower() or termino in c["email"].lower()
+        ]
+    if nivel_id:
+        clientes = [c for c in clientes if c["nivel_id"] == nivel_id]
+
+    contexto = {
+        "activo": "usuarios",
+        "usuario": request.usuario,
+        "nivel_info": request.nivel_info,
+        "clientes": sorted(clientes, key=lambda c: c["nombre_completo"].lower()),
+        "stats": stats,
+        "niveles": data.NIVELES,
+        "filtros": {"q": request.GET.get("q", ""), "nivel": nivel_id},
+    }
+    return render(request, "usuarios_lista.html", contexto)
+
+
+@requiere_admin
+def usuario_nuevo(request):
+    if request.method == "POST":
+        form = UsuarioCrearForm(request.POST)
+        if form.is_valid():
+            datos = form.cleaned_data
+            data.crear_usuario(
+                nombre=datos["nombre"],
+                apellido=datos["apellido"],
+                email=datos["email"],
+                telefono=datos["telefono"],
+                password=datos["password"],
+                es_admin=datos["es_admin"],
+            )
+            messages.success(request, f"Cliente {datos['email']} creado con éxito.")
+            return redirect("fidelizacion:usuarios")
+    else:
+        form = UsuarioCrearForm()
+
+    contexto = {
+        "activo": "usuarios",
+        "usuario": request.usuario,
+        "nivel_info": request.nivel_info,
+        "form": form,
+        "es_creacion": True,
+        "titulo": "Nuevo cliente",
+        "texto_boton": "Crear cliente",
+    }
+    return render(request, "usuario_form.html", contexto)
+
+
+@requiere_admin
+def usuario_editar(request, email):
+    cliente = _usuario_o_404(email)
+
+    if request.method == "POST":
+        form = UsuarioEditarForm(request.POST)
+        if form.is_valid():
+            datos = form.cleaned_data
+            data.actualizar_usuario(
+                email=cliente["email"],
+                nombre=datos["nombre"],
+                apellido=datos["apellido"],
+                telefono=datos["telefono"],
+            )
+            messages.success(request, f"Cliente {cliente['email']} actualizado.")
+            return redirect("fidelizacion:usuarios")
+    else:
+        form = UsuarioEditarForm(initial={
+            "nombre": cliente["nombre"],
+            "apellido": cliente["apellido"],
+            "telefono": cliente["telefono"],
+        })
+
+    contexto = {
+        "activo": "usuarios",
+        "usuario": request.usuario,
+        "nivel_info": request.nivel_info,
+        "form": form,
+        "cliente": cliente,
+        "es_creacion": False,
+        "titulo": f"Editar cliente: {cliente['nombre']} {cliente['apellido']}",
+        "texto_boton": "Guardar cambios",
+    }
+    return render(request, "usuario_form.html", contexto)
+
+
+@requiere_admin
+def usuario_eliminar(request, email):
+    # El borrado solo se ejecuta por POST desde el modal de confirmación de
+    # la lista (igual que el modal "Confirmar Eliminación" del template de
+    # referencia). Un GET directo simplemente vuelve a la lista.
+    cliente = _usuario_o_404(email)
+    if request.method != "POST":
+        return redirect("fidelizacion:usuarios")
+
+    if cliente["email"] == request.usuario["email"]:
+        messages.warning(request, "No puedes eliminar tu propia cuenta de administrador.")
+        return redirect("fidelizacion:usuarios")
+
+    data.eliminar_usuario(cliente["email"])
+    messages.success(request, f"Cliente {cliente['email']} eliminado.")
+    return redirect("fidelizacion:usuarios")
