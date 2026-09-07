@@ -1,0 +1,24 @@
+# Entorno virtual
+venv/
+env/
+.venv/
+
+# Variables de entorno (contiene la SECRET_KEY real)
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Base de datos local (no usada en la Evaluación 1, pero se ignora por si se crea)
+db.sqlite3
+
+# Django
+staticfiles/
+media/
+
+# Editor / SO
+.vscode/
+.idea/
+.DS_Store

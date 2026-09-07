@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% load static %}
+{% load vikingcard_extras %}
+
+{% block title %}Vikingos Barber — VikingCard{% endblock %}
+
+{% block header %}
+  {% include "partials/header_publico.html" %}
+{% endblock %}
+
+{% block content %}
+<main>
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <h1>Tu corte, tu tarjeta, tus puntos.</h1>
+        <p class="lede">VikingCard es la cuenta digital de Vikingos Barber. Carga saldo, paga cada corte al instante y acumula puntos que te acercan a beneficios exclusivos.</p>
+        <div class="hero-actions">
+          {% if usuario %}
+            <a href="{% url 'fidelizacion:dashboard' %}" class="btn btn-primary">Ir a mi VikingCard</a>
+          {% else %}
+            <a href="{% url 'fidelizacion:registro' %}" class="btn btn-primary">Crear mi VikingCard</a>
+          {% endif %}
+          <a href="{% url 'fidelizacion:servicios' %}" class="btn btn-ghost">Ver servicios</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><b>3</b><span>sucursales en Santiago</span></div>
+          <div class="hero-stat"><b>1 pto</b><span>por cada $1.000 en servicios</span></div>
+          <div class="hero-stat"><b>{{ niveles|length }}</b><span>niveles de fidelización</span></div>
+        </div>
+      </div>
+
+      <div class="viking-card">
+        <div class="vc-top">
+          <div class="vc-mark">
+            {% include "partials/logo_tarjeta.html" %}
+            <span>VIKINGCARD</span>
+          </div>
+          {% if usuario %}
+            <span class="vc-tier">{{ nivel_info.actual.nombre }}</span>
+          {% else %}
+            <span class="vc-tier">Escudero</span>
+          {% endif %}
+        </div>
+        <div>
+          <div class="vc-chip"></div>
+          {% if usuario %}
+            <div class="vc-number">•••• •••• •••• {{ usuario.tarjeta_numero }}</div>
+          {% else %}
+            <div class="vc-number">•••• •••• •••• ????</div>
+          {% endif %}
+        </div>
+        <div class="vc-bottom">
+          {% if usuario %}
+            <div class="vc-holder">Titular<b>{{ usuario.nombre }} {{ usuario.apellido }}</b></div>
+            <div class="vc-balance"><span>Saldo</span><b>{{ usuario.saldo|clp }}</b></div>
+          {% else %}
+            <div class="vc-holder">Titular<b>Tu nombre aquí</b></div>
+            <div class="vc-balance"><span>Saldo</span><b>$0</b></div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight" id="como-funciona">
+    <div class="container">
+      <div class="section-head">
+        <h2>Cómo funciona</h2>
+        <p>Activar y usar tu VikingCard toma tres pasos, sin filas ni papeleo.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-index">01</div>
+          <h3>Crea tu cuenta</h3>
+          <p>Regístrate en menos de un minuto y activa tu VikingCard digital al instante.</p>
+        </div>
+        <div class="step">
+          <div class="step-index">02</div>
+          <h3>Carga saldo</h3>
+          <p>Recarga con tarjeta bancaria, transferencia o efectivo en cualquier sucursal.</p>
+        </div>
+        <div class="step">
+          <div class="step-index">03</div>
+          <h3>Paga y acumula</h3>
+          <p>Usa tu saldo en cada corte y suma puntos que te acercan al siguiente nivel.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="beneficios">
+    <div class="container">
+      <div class="section-head">
+        <h2>Todo lo que necesitas en una tarjeta</h2>
+        <p>VikingCard reemplaza el efectivo y las boletas sueltas por una cuenta clara y siempre a mano.</p>
+      </div>
+      <div class="benefits">
+        <div class="benefit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="6" y1="14" x2="10" y2="14"/></svg>
+          <div>
+            <h3>Tarjeta virtual al instante</h3>
+            <p>Olvídate del efectivo: tu VikingCard vive en tu celular y está lista para pagar apenas te registras.</p>
+          </div>
+        </div>
+        <div class="benefit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M9 10.3c0-1 1.2-1.8 3-1.8s3 .8 3 1.8-1.2 1.4-3 1.7-3 .8-3 1.9 1.3 1.8 3 1.8 3-.8 3-1.8"/></svg>
+          <div>
+            <h3>Puntos por cada corte</h3>
+            <p>Cada servicio pagado con VikingCard suma puntos que se transforman en descuentos y regalos.</p>
+          </div>
+        </div>
+        <div class="benefit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h16l-1.5-8-4 4-2.5-6-2.5 6-4-4Z"/><line x1="4" y1="20" x2="20" y2="20"/></svg>
+          <div>
+            <h3>Niveles con beneficios reales</h3>
+            <p>Mientras más visitas, más sube tu nivel: de Escudero a Jarl, con precios y atención preferente.</p>
+          </div>
+        </div>
+        <div class="benefit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 L20 5 V11 C20 16.5 16.5 20.2 12 22 C7.5 20.2 4 16.5 4 11 V5 Z"/><path d="M9 12l2 2 4-4"/></svg>
+          <div>
+            <h3>Tus fondos, protegidos</h3>
+            <p>Control de acceso e historial de movimientos, para que siempre sepas en qué se usó tu saldo.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight" id="niveles">
+    <div class="container">
+      <div class="section-head">
+        <h2>Sube de nivel con cada visita</h2>
+        <p>Ganas 1 punto por cada $1.000 pagado con tu VikingCard. Estos son los niveles del clan.</p>
+      </div>
+      <div class="tiers">
+        {% for nivel in niveles %}
+          <div class="tier-card {% if usuario and nivel_info.actual.id == nivel.id %}is-current{% endif %}">
+            <div class="tier-name">{{ nivel.nombre }}</div>
+            <div class="tier-range">
+              {% if nivel.puntos_max %}
+                {{ nivel.puntos_min }} – {{ nivel.puntos_max }} puntos
+              {% else %}
+                {{ nivel.puntos_min }}+ puntos
+              {% endif %}
+            </div>
+            <p class="tier-perk">{{ nivel.beneficio }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="panel-head">
+        <div class="section-head" style="margin-bottom:0;">
+          <h2>Servicios destacados</h2>
+          <p>Paga cualquiera de estos servicios directo con tu VikingCard.</p>
+        </div>
+        <a href="{% url 'fidelizacion:servicios' %}">Ver todos los servicios</a>
+      </div>
+      <div class="service-list">
+        {% for servicio in servicios_destacados %}
+          <div class="service-row">
+            <div class="service-icon">
+              {% include "partials/icono_servicio.html" with icono=servicio.icono %}
+            </div>
+            <div>
+              <div class="service-name">{{ servicio.nombre }}</div>
+              <div class="service-desc">{{ servicio.descripcion }}.</div>
+            </div>
+            <div class="service-price">{{ servicio.precio|clp }}</div>
+            <div class="service-points">+{{ servicio.precio|puntos }} pts</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container cta-final">
+      <h2>¿Listo para unirte al clan?</h2>
+      <p>Crea tu cuenta gratis y activa tu VikingCard hoy mismo. Sin costo de mantención.</p>
+      <div class="hero-actions">
+        {% if usuario %}
+          <a href="{% url 'fidelizacion:dashboard' %}" class="btn btn-primary">Ir a mi cuenta</a>
+        {% else %}
+          <a href="{% url 'fidelizacion:registro' %}" class="btn btn-primary">Crear cuenta</a>
+          <a href="{% url 'fidelizacion:login' %}" class="btn btn-ghost">Ya tengo cuenta</a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+</main>
+{% endblock %}
+
+{% block footer %}
+  {% include "partials/footer_completo.html" %}
+{% endblock %}

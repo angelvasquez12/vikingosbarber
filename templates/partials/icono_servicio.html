@@ -1,0 +1,13 @@
+{% if icono == "barba" %}
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6c0 4-1 6-1 9a7 7 0 0 0 14 0c0-3-1-5-1-9"/><path d="M9 6h6"/></svg>
+{% elif icono == "navaja" %}
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 L16 4 L20 8 L10 18 Z"/><line x1="4" y1="12" x2="8" y2="20"/></svg>
+{% elif icono == "combo" %}
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17h16l-1.5-8-4 4-2.5-6-2.5 6-4-4Z"/><line x1="4" y1="20" x2="20" y2="20"/></svg>
+{% elif icono == "tinte" %}
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11Z"/></svg>
+{% elif icono == "nino" %}
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M5 20c0-4 3-6 7-6s7 2 7 6"/></svg>
+{% else %}
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.2"/><circle cx="6" cy="18" r="2.2"/><line x1="8" y1="7.5" x2="20" y2="17"/><line x1="8" y1="16.5" x2="20" y2="7"/></svg>
+{% endif %}

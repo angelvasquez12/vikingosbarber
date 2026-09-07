@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "nombre": "Corte Clásico \"Vikingo\"",
+    "descripcion": "Corte a máquina y tijera con acabado prolijo",
+    "duracion_min": 30,
+    "precio": 12000,
+    "icono": "tijeras"
+  },
+  {
+    "id": 2,
+    "nombre": "Corte + Barba \"Berserker\"",
+    "descripcion": "Corte completo y perfilado de barba con toalla caliente",
+    "duracion_min": 45,
+    "precio": 18000,
+    "icono": "barba"
+  },
+  {
+    "id": 3,
+    "nombre": "Afeitado con Navaja \"Ragnar\"",
+    "descripcion": "Afeitado clásico con espuma caliente y navaja",
+    "duracion_min": 25,
+    "precio": 10000,
+    "icono": "navaja"
+  },
+  {
+    "id": 4,
+    "nombre": "Diseño de Barba",
+    "descripcion": "Perfilado y contorno con línea definida",
+    "duracion_min": 20,
+    "precio": 8000,
+    "icono": "barba"
+  },
+  {
+    "id": 5,
+    "nombre": "Combo Completo \"Jarl\"",
+    "descripcion": "Corte, barba, afeitado a navaja y masaje capilar",
+    "duracion_min": 60,
+    "precio": 25000,
+    "icono": "combo"
+  },
+  {
+    "id": 6,
+    "nombre": "Tinte de Barba o Cabello",
+    "descripcion": "Coloración profesional para disimular canas o renovar el look",
+    "duracion_min": 40,
+    "precio": 15000,
+    "icono": "tinte"
+  },
+  {
+    "id": 7,
+    "nombre": "Corte Niño \"Joven Vikingo\"",
+    "descripcion": "Corte para niños hasta 12 años",
+    "duracion_min": 25,
+    "precio": 9000,
+    "icono": "nino"
+  }
+]

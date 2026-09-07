@@ -1,0 +1,69 @@
+[
+  {
+    "email": "kristian@vikingosbarber.cl",
+    "password_hash": "pbkdf2_sha256$1500000$Fh9eXNpFYL08DLHt5wBpV7$nmVnSRtTDj6ajxrob8TAiORCdQ7fan19REMmClTyfNo=",
+    "nombre": "Kristian",
+    "apellido": "Soto",
+    "telefono": "+56 9 1234 5678",
+    "tarjeta_numero": "4127",
+    "saldo": 23500,
+    "puntos": 340,
+    "fecha_registro": "2026-05-12",
+    "movimientos": [
+      {
+        "fecha": "2026-09-02",
+        "detalle": "Combo Completo \"Jarl\"",
+        "sucursal": "providencia",
+        "tipo": "pago",
+        "puntos": 25,
+        "monto": -25000,
+        "estado": "pagado"
+      },
+      {
+        "fecha": "2026-08-28",
+        "detalle": "Recarga de saldo (transferencia)",
+        "sucursal": null,
+        "tipo": "recarga",
+        "puntos": 0,
+        "monto": 30000,
+        "estado": "recarga"
+      },
+      {
+        "fecha": "2026-08-15",
+        "detalle": "Corte Clásico \"Vikingo\"",
+        "sucursal": "providencia",
+        "tipo": "pago",
+        "puntos": 12,
+        "monto": -12000,
+        "estado": "pagado"
+      },
+      {
+        "fecha": "2026-08-15",
+        "detalle": "Diseño de Barba",
+        "sucursal": "providencia",
+        "tipo": "pago",
+        "puntos": 8,
+        "monto": -8000,
+        "estado": "pagado"
+      },
+      {
+        "fecha": "2026-08-02",
+        "detalle": "Recarga de saldo (tarjeta)",
+        "sucursal": null,
+        "tipo": "recarga",
+        "puntos": 0,
+        "monto": 20000,
+        "estado": "recarga"
+      },
+      {
+        "fecha": "2026-07-19",
+        "detalle": "Afeitado con Navaja \"Ragnar\"",
+        "sucursal": "nunoa",
+        "tipo": "pago",
+        "puntos": 10,
+        "monto": -10000,
+        "estado": "en_revision"
+      }
+    ]
+  }
+]

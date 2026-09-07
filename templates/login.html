@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Iniciar sesión — Vikingos Barber{% endblock %}
+
+{% block header %}
+  {% include "partials/header_auth.html" with modo="login" %}
+{% endblock %}
+
+{% block content %}
+<main class="auth-shell">
+  <div class="auth-card">
+    <h1>Bienvenido de vuelta</h1>
+    <p class="lede">Ingresa a tu cuenta para revisar tu saldo, tus puntos y tu historial de VikingCard.</p>
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-error">
+        {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+      </div>
+    {% endif %}
+
+    <form action="{% url 'fidelizacion:login' %}" method="post" novalidate>
+      {% csrf_token %}
+      {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+      <div class="field">
+        <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+        {{ form.email|add_error_class:"is-invalid" }}
+        {% for error in form.email.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+      </div>
+
+      <div class="field">
+        <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+        {{ form.password|add_error_class:"is-invalid" }}
+        {% for error in form.password.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+      </div>
+
+      <div class="field-check">
+        {{ form.recordar }}
+        <label for="{{ form.recordar.id_for_label }}" style="margin:0;">{{ form.recordar.label }}</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:28px;">Iniciar sesión</button>
+    </form>
+
+    <p class="auth-foot">¿Aún no tienes cuenta? <a href="{% url 'fidelizacion:registro' %}">Créala aquí</a></p>
+    <p class="text-muted" style="text-align:center; font-size:0.78rem; margin-top:14px;">
+      Cuenta demo: kristian@vikingosbarber.cl / vikingo123
+    </p>
+  </div>
+</main>
+{% endblock %}

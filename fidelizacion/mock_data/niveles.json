@@ -1,0 +1,34 @@
+[
+  {
+    "id": "escudero",
+    "nombre": "Escudero",
+    "puntos_min": 0,
+    "puntos_max": 199,
+    "descuento_pct": 0,
+    "beneficio": "VikingCard activa y promociones de bienvenida."
+  },
+  {
+    "id": "guerrero",
+    "nombre": "Guerrero",
+    "puntos_min": 200,
+    "puntos_max": 499,
+    "descuento_pct": 5,
+    "beneficio": "5% de descuento en combos y prioridad de agenda."
+  },
+  {
+    "id": "berserker",
+    "nombre": "Berserker",
+    "puntos_min": 500,
+    "puntos_max": 999,
+    "descuento_pct": 10,
+    "beneficio": "10% de descuento y un corte de cortesía al año."
+  },
+  {
+    "id": "jarl",
+    "nombre": "Jarl",
+    "puntos_min": 1000,
+    "puntos_max": null,
+    "descuento_pct": 15,
+    "beneficio": "15% de descuento, atención VIP y eventos del clan."
+  }
+]

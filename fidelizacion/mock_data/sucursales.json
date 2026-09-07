@@ -1,0 +1,5 @@
+[
+  { "id": "providencia", "nombre": "Providencia", "direccion": "Av. Providencia 1988, Santiago" },
+  { "id": "nunoa", "nombre": "Ñuñoa", "direccion": "Av. Irarrázaval 3450, Santiago" },
+  { "id": "lascondes", "nombre": "Las Condes", "direccion": "Av. Apoquindo 4900, Santiago" }
+]

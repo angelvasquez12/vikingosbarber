@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load vikingcard_extras %}
+
+{% block title %}Mi cuenta — Vikingos Barber{% endblock %}
+
+{% block header %}
+  {% include "partials/header_app.html" %}
+{% endblock %}
+
+{% block content %}
+<main class="app-shell">
+  <div class="container">
+    <div class="section-head" style="margin-bottom:32px;">
+      <h2>Hola, {{ usuario.nombre }}</h2>
+      <p>Este es el estado actual de tu VikingCard.</p>
+    </div>
+
+    <div class="app-grid">
+      <div>
+        <div class="viking-card" style="margin:0 0 24px;max-width:none;">
+          <div class="vc-top">
+            <div class="vc-mark">
+              {% include "partials/logo_tarjeta.html" %}
+              <span>VIKINGCARD</span>
+            </div>
+            <span class="vc-tier">{{ nivel_info.actual.nombre }}</span>
+          </div>
+          <div>
+            <div class="vc-chip"></div>
+            <div class="vc-number">•••• •••• •••• {{ usuario.tarjeta_numero }}</div>
+          </div>
+          <div class="vc-bottom">
+            <div class="vc-holder">Titular<b>{{ usuario.nombre }} {{ usuario.apellido }}</b></div>
+            <div class="vc-balance"><span>Saldo disponible</span><b>{{ usuario.saldo|clp }}</b></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Tu progreso de nivel</h2>
+            <span class="text-muted" style="font-size:0.85rem;">{{ usuario.puntos }} pts</span>
+          </div>
+          {% if nivel_info.siguiente %}
+            <p class="text-muted" style="font-size:0.9rem;">Te faltan {{ nivel_info.puntos_faltantes }} puntos para alcanzar el nivel {{ nivel_info.siguiente.nombre }}.</p>
+            <div class="points-bar"><div class="points-bar-fill" style="width:{{ nivel_info.progreso_pct }}%;"></div></div>
+            <div class="points-caption">
+              <span>{{ nivel_info.actual.nombre }} · {{ nivel_info.actual.puntos_min }} pts</span>
+              <span>{{ nivel_info.siguiente.nombre }} · {{ nivel_info.siguiente.puntos_min }} pts</span>
+            </div>
+          {% else %}
+            <p class="text-muted" style="font-size:0.9rem;">¡Alcanzaste el nivel máximo del clan! Disfruta tus beneficios Jarl.</p>
+            <div class="points-bar"><div class="points-bar-fill" style="width:100%;"></div></div>
+          {% endif %}
+
+          <div class="quick-actions">
+            <a href="{% url 'fidelizacion:recargar' %}" class="quick-action">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              Recargar saldo
+            </a>
+            <a href="{% url 'fidelizacion:transacciones' %}" class="quick-action">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+              Ver historial
+            </a>
+            <a href="{% url 'fidelizacion:servicios' %}" class="quick-action">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.2"/><circle cx="6" cy="18" r="2.2"/><line x1="8" y1="7.5" x2="20" y2="17"/><line x1="8" y1="16.5" x2="20" y2="7"/></svg>
+              Ver servicios
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Últimos movimientos</h2>
+            <a href="{% url 'fidelizacion:transacciones' %}">Ver todo</a>
+          </div>
+          {% for movimiento in movimientos_recientes %}
+            <div class="mini-tx">
+              <div>
+                <div class="mini-tx-title">{{ movimiento.detalle }}</div>
+                <div class="mini-tx-date">
+                  {{ movimiento.fecha|fecha_larga }}{% if movimiento.sucursal_nombre %} · Sucursal {{ movimiento.sucursal_nombre }}{% endif %}
+                </div>
+              </div>
+              <div class="mini-tx-amount {% if movimiento.monto < 0 %}amount-neg{% else %}amount-pos{% endif %}">{{ movimiento.monto|clp }}</div>
+            </div>
+          {% empty %}
+            <p class="text-muted" style="font-size:0.9rem;">Todavía no tienes movimientos registrados.</p>
+          {% endfor %}
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Beneficios de tu nivel</h2>
+          </div>
+          <p class="text-muted" style="font-size:0.92rem;">Como {{ nivel_info.actual.nombre }}, {{ nivel_info.actual.beneficio|lower }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

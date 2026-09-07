@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load vikingcard_extras %}
+
+{% block title %}Transacciones — Vikingos Barber{% endblock %}
+
+{% block header %}
+  {% include "partials/header_app.html" %}
+{% endblock %}
+
+{% block content %}
+<main class="app-shell">
+  <div class="container">
+    <div class="section-head" style="margin-bottom:24px;">
+      <h2>Historial de transacciones</h2>
+      <p>Todos los movimientos de tu VikingCard: recargas, pagos y ajustes.</p>
+    </div>
+
+    <form method="get" class="filters">
+      <select name="tipo" aria-label="Filtrar por tipo" onchange="this.form.submit()">
+        <option value="" {% if not filtros.tipo %}selected{% endif %}>Todos los movimientos</option>
+        <option value="pago" {% if filtros.tipo == "pago" %}selected{% endif %}>Pagos</option>
+        <option value="recarga" {% if filtros.tipo == "recarga" %}selected{% endif %}>Recargas</option>
+      </select>
+      <select name="sucursal" aria-label="Filtrar por sucursal" onchange="this.form.submit()">
+        <option value="">Todas las sucursales</option>
+        {% for sucursal in sucursales %}
+          <option value="{{ sucursal.id }}" {% if filtros.sucursal == sucursal.id %}selected{% endif %}>{{ sucursal.nombre }}</option>
+        {% endfor %}
+      </select>
+      <input type="date" name="desde" value="{{ filtros.desde }}" aria-label="Desde" onchange="this.form.submit()">
+      {% if filtros.tipo or filtros.sucursal or filtros.desde %}
+        <a href="{% url 'fidelizacion:transacciones' %}" class="btn btn-ghost btn-sm">Limpiar filtros</a>
+      {% endif %}
+    </form>
+
+    <div class="panel">
+      <div class="table-wrap">
+        <table class="tx-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Detalle</th>
+              <th>Sucursal</th>
+              <th>Puntos</th>
+              <th>Monto</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for movimiento in movimientos %}
+              <tr>
+                <td>{{ movimiento.fecha|fecha_corta }}</td>
+                <td>{{ movimiento.detalle }}</td>
+                <td>{{ movimiento.sucursal_nombre|default:"—" }}</td>
+                <td>{% if movimiento.puntos %}+{{ movimiento.puntos }}{% else %}—{% endif %}</td>
+                <td class="{% if movimiento.monto < 0 %}amount-neg{% else %}amount-pos{% endif %}">{{ movimiento.monto|clp }}</td>
+                <td><span class="badge {{ movimiento.estado_info.clase_css }}">{{ movimiento.estado_info.etiqueta }}</span></td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="6" class="text-muted" style="text-align:center; padding:32px 16px;">
+                  No hay movimientos que coincidan con los filtros seleccionados.
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

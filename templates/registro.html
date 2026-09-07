@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Crear cuenta — Vikingos Barber{% endblock %}
+
+{% block header %}
+  {% include "partials/header_auth.html" with modo="registro" %}
+{% endblock %}
+
+{% block content %}
+<main class="auth-shell">
+  <div class="auth-card" style="max-width:520px;">
+    <h1>Activa tu VikingCard</h1>
+    <p class="lede">Crea tu cuenta en menos de un minuto y empieza a acumular puntos desde tu primer corte.</p>
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-error">
+        {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+      </div>
+    {% endif %}
+
+    <form action="{% url 'fidelizacion:registro' %}" method="post" novalidate>
+      {% csrf_token %}
+
+      <div class="field-row">
+        <div class="field" style="margin-top:0;">
+          <label for="{{ form.nombre.id_for_label }}">{{ form.nombre.label }}</label>
+          {{ form.nombre|add_error_class:"is-invalid" }}
+          {% for error in form.nombre.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div class="field" style="margin-top:0;">
+          <label for="{{ form.apellido.id_for_label }}">{{ form.apellido.label }}</label>
+          {{ form.apellido|add_error_class:"is-invalid" }}
+          {% for error in form.apellido.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+        {{ form.email|add_error_class:"is-invalid" }}
+        {% for error in form.email.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+      </div>
+
+      <div class="field">
+        <label for="{{ form.telefono.id_for_label }}">{{ form.telefono.label }}</label>
+        {{ form.telefono|add_error_class:"is-invalid" }}
+        {% for error in form.telefono.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label>
+          {{ form.password|add_error_class:"is-invalid" }}
+          {% if form.password.help_text %}<p class="field-hint">{{ form.password.help_text }}</p>{% endif %}
+          {% for error in form.password.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div class="field">
+          <label for="{{ form.password_confirm.id_for_label }}">{{ form.password_confirm.label }}</label>
+          {{ form.password_confirm|add_error_class:"is-invalid" }}
+          {% for error in form.password_confirm.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+      </div>
+
+      <div class="field-check">
+        {{ form.terminos }}
+        <label for="{{ form.terminos.id_for_label }}" style="margin:0;">{{ form.terminos.label }}</label>
+      </div>
+      {% for error in form.terminos.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:28px;">Crear cuenta</button>
+    </form>
+
+    <p class="auth-foot">¿Ya tienes cuenta? <a href="{% url 'fidelizacion:login' %}">Inicia sesión</a></p>
+  </div>
+</main>
+{% endblock %}

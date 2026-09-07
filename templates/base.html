@@ -1,0 +1,32 @@
+{% load static %}<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Vikingos Barber — VikingCard{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}VikingCard: la tarjeta digital de fidelización de Vikingos Barber. Carga saldo, paga tus cortes y acumula puntos.{% endblock %}">
+  <link rel="icon" type="image/png" href="{% static 'img/logo-vikingos-barber.png' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+  {% block header %}{% endblock %}
+
+  {% if messages %}
+    <div class="container alerts-wrap">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% block content %}{% endblock %}
+
+  {% block footer %}
+    {% include "partials/footer_simple.html" %}
+  {% endblock %}
+
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

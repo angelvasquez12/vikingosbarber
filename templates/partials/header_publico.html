@@ -1,0 +1,25 @@
+{% load static %}
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="{% url 'fidelizacion:inicio' %}" class="logo">
+      {% include "partials/logo.html" %}
+    </a>
+    <nav class="main-nav" id="main-nav">
+      <a href="{% url 'fidelizacion:inicio' %}" class="{% if activo == 'inicio' %}is-active{% endif %}">Inicio</a>
+      <a href="{% url 'fidelizacion:servicios' %}" class="{% if activo == 'servicios' %}is-active{% endif %}">Servicios</a>
+      <a href="{% url 'fidelizacion:inicio' %}#niveles">VikingCard</a>
+    </nav>
+    <div class="header-actions">
+      {% if usuario %}
+        <a href="{% url 'fidelizacion:dashboard' %}" class="btn btn-ghost">Mi cuenta</a>
+        <a href="{% url 'fidelizacion:logout' %}" class="btn btn-primary">Cerrar sesión</a>
+      {% else %}
+        <a href="{% url 'fidelizacion:login' %}" class="btn btn-ghost">Iniciar sesión</a>
+        <a href="{% url 'fidelizacion:registro' %}" class="btn btn-primary">Crear cuenta</a>
+      {% endif %}
+    </div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>

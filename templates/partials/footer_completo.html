@@ -1,0 +1,34 @@
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="{% url 'fidelizacion:inicio' %}" class="logo">
+          {% include "partials/logo.html" %}
+        </a>
+        <p>Barbería y programa de fidelización VikingCard. Providencia, Santiago de Chile.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <a href="{% url 'fidelizacion:inicio' %}">Inicio</a>
+        <a href="{% url 'fidelizacion:servicios' %}">Servicios</a>
+        {% if usuario %}
+          <a href="{% url 'fidelizacion:dashboard' %}">Mi cuenta</a>
+          <a href="{% url 'fidelizacion:logout' %}">Cerrar sesión</a>
+        {% else %}
+          <a href="{% url 'fidelizacion:login' %}">Iniciar sesión</a>
+          <a href="{% url 'fidelizacion:registro' %}">Crear cuenta</a>
+        {% endif %}
+      </div>
+      <div class="footer-col">
+        <h4>Sucursal Providencia</h4>
+        <li>Av. Providencia 1988, Santiago</li>
+        <li>Lun a sáb, 10:00–20:00</li>
+        <li>contacto@vikingosbarber.cl</li>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Vikingos Barber. Todos los derechos reservados.</span>
+      <span>Proyecto académico — Programación Backend, INACAP</span>
+    </div>
+  </div>
+</footer>

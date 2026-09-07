@@ -1,0 +1,27 @@
+{% load static %}
+<header class="site-header app-header">
+  <div class="container header-inner">
+    <a href="{% url 'fidelizacion:dashboard' %}" class="logo">
+      {% include "partials/logo.html" %}
+    </a>
+    <div class="app-user">
+      <div class="app-user-avatar">{{ usuario.nombre|slice:':1'|upper }}{{ usuario.apellido|slice:':1'|upper }}</div>
+      <div class="app-user-meta">
+        <div class="app-user-name">{{ usuario.nombre }} {{ usuario.apellido }}</div>
+        <div class="app-user-tier">Nivel {{ nivel_info.actual.nombre }}</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="{% url 'fidelizacion:logout' %}" class="btn btn-ghost btn-sm">Cerrar sesión</a>
+    </div>
+  </div>
+</header>
+
+<nav class="app-tabs">
+  <div class="container">
+    <a href="{% url 'fidelizacion:dashboard' %}" class="app-tab {% if activo == 'dashboard' %}is-active{% endif %}">Resumen</a>
+    <a href="{% url 'fidelizacion:recargar' %}" class="app-tab {% if activo == 'recargar' %}is-active{% endif %}">Recargar saldo</a>
+    <a href="{% url 'fidelizacion:transacciones' %}" class="app-tab {% if activo == 'transacciones' %}is-active{% endif %}">Transacciones</a>
+    <a href="{% url 'fidelizacion:servicios' %}" class="app-tab {% if activo == 'servicios' %}is-active{% endif %}">Servicios</a>
+  </div>
+</nav>

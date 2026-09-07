@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load vikingcard_extras %}
+
+{% block title %}Servicios — Vikingos Barber{% endblock %}
+{% block meta_description %}Catálogo de servicios de Vikingos Barber: cortes, barba, afeitado y combos. Paga con tu VikingCard y suma puntos.{% endblock %}
+
+{% block header %}
+  {% include "partials/header_publico.html" %}
+{% endblock %}
+
+{% block content %}
+<main>
+  <section class="section section--tight">
+    <div class="container">
+      <div class="section-head">
+        <h2>Nuestros servicios</h2>
+        <p>Corte, barba y combos pensados para cada guerrero. Paga con tu VikingCard y suma puntos en cada visita.</p>
+      </div>
+
+      <div class="service-list">
+        {% for servicio in servicios %}
+          <div class="service-row">
+            <div class="service-icon">
+              {% include "partials/icono_servicio.html" with icono=servicio.icono %}
+            </div>
+            <div>
+              <div class="service-name">{{ servicio.nombre }}</div>
+              <div class="service-desc">{{ servicio.descripcion }} · {{ servicio.duracion_min }} min</div>
+            </div>
+            <div class="service-price">{{ servicio.precio|clp }}</div>
+            <div class="service-points">+{{ servicio.precio|puntos }} pts</div>
+          </div>
+        {% empty %}
+          <p class="text-muted">Todavía no hay servicios cargados.</p>
+        {% endfor %}
+      </div>
+
+      <p class="text-muted" style="margin-top:28px; font-size:0.9rem;">Los niveles Guerrero, Berserker y Jarl obtienen descuentos adicionales sobre estos precios. Revisa tus beneficios en el resumen de tu cuenta.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container cta-final">
+      <h2>Reserva tu próximo corte</h2>
+      <p>Crea tu cuenta, carga saldo en tu VikingCard y agenda tu hora en la sucursal que prefieras.</p>
+      <div class="hero-actions">
+        {% if usuario %}
+          <a href="{% url 'fidelizacion:dashboard' %}" class="btn btn-ghost">Ir a mi cuenta</a>
+        {% else %}
+          <a href="{% url 'fidelizacion:registro' %}" class="btn btn-primary">Crear cuenta</a>
+          <a href="{% url 'fidelizacion:login' %}" class="btn btn-ghost">Ya tengo cuenta</a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}
+
+{% block footer %}
+  {% include "partials/footer_completo.html" %}
+{% endblock %}

@@ -1,0 +1,24 @@
+{% load static %}
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="{% url 'fidelizacion:inicio' %}" class="logo">
+      {% include "partials/logo.html" %}
+    </a>
+    <nav class="main-nav" id="main-nav">
+      <a href="{% url 'fidelizacion:inicio' %}">Inicio</a>
+      <a href="{% url 'fidelizacion:servicios' %}">Servicios</a>
+    </nav>
+    <div class="header-actions">
+      {% if modo == "login" %}
+        <span class="text-muted" style="font-size:0.9rem;">¿Aún no tienes cuenta?</span>
+        <a href="{% url 'fidelizacion:registro' %}" class="btn btn-primary">Crear cuenta</a>
+      {% else %}
+        <span class="text-muted" style="font-size:0.9rem;">¿Ya tienes cuenta?</span>
+        <a href="{% url 'fidelizacion:login' %}" class="btn btn-primary">Iniciar sesión</a>
+      {% endif %}
+    </div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>

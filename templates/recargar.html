@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load vikingcard_extras %}
+{% load widget_tweaks %}
+
+{% block title %}Recargar saldo — Vikingos Barber{% endblock %}
+
+{% block header %}
+  {% include "partials/header_app.html" %}
+{% endblock %}
+
+{% block content %}
+<main class="app-shell">
+  <div class="container" style="max-width:720px;">
+    <div class="section-head" style="margin-bottom:24px;">
+      <h2>Recargar saldo</h2>
+      <p>El monto quedará disponible al instante en tu VikingCard.</p>
+    </div>
+
+    <div class="balance-summary">
+      <div>
+        <span>Saldo actual</span>
+        <b>{{ usuario.saldo|clp }}</b>
+      </div>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-gold);"><rect x="3" y="6" width="18" height="12" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    </div>
+
+    <div class="panel">
+      <form action="{% url 'fidelizacion:recargar' %}" method="post" novalidate>
+        {% csrf_token %}
+        <div class="panel-head">
+          <h2>Elige un monto</h2>
+        </div>
+        <div class="amount-options">
+          {% for monto in montos_rapidos %}
+            <div class="amount-option {% if form.monto.value|stringformat:'s' == monto|stringformat:'s' %}is-selected{% endif %}" data-amount="{{ monto }}">{{ monto|clp }}</div>
+          {% endfor %}
+        </div>
+        <div class="field">
+          <label for="{{ form.monto.id_for_label }}">O ingresa otro monto</label>
+          {{ form.monto|add_error_class:"is-invalid" }}
+          <p class="field-hint">Monto mínimo de recarga: {{ monto_minimo|clp }}.</p>
+          {% for error in form.monto.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+        </div>
+
+        <div class="panel-head" style="margin-top:32px;">
+          <h2>Método de pago</h2>
+        </div>
+        <div class="pay-methods">
+          {% for radio in form.metodo %}
+            <label class="pay-method {% if radio.data.selected %}is-selected{% endif %}">
+              {{ radio.tag }}
+              {% if radio.data.value == "tarjeta" %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              {% elif radio.data.value == "transferencia" %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg>
+              {% else %}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M9 10.3c0-1 1.2-1.8 3-1.8s3 .8 3 1.8-1.2 1.4-3 1.7-3 .8-3 1.9 1.3 1.8 3 1.8 3-.8 3-1.8"/></svg>
+              {% endif %}
+              {{ radio.choice_label }}
+            </label>
+          {% endfor %}
+        </div>
+        {% for error in form.metodo.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+
+        <button type="submit" class="btn btn-gold btn-block" style="margin-top:32px;">Confirmar recarga</button>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}
