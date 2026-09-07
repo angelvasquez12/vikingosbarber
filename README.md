@@ -44,6 +44,3 @@ fidelizacion/        App principal: views, forms, urls, datos mock, tests
 templates/           Vistas HTML con herencia y etiquetas Django
 static/              CSS, JS y logo oficial de la barbería
 ```
-
-**Siguiente etapa (Unidad 2):** reemplazar los datos mock por modelos reales
-con base de datos y panel de administración de Django.
