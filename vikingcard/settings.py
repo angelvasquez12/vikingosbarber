@@ -36,12 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-
-    # Paquete externo: agrega filtros/plantillas para enriquecer el
-    # renderizado de formularios HTML manteniendo el diseño propio del sitio.
     'widget_tweaks',
-
-    # App propia del caso "Tarjetas y Fidelización" (VikingCard).
     'fidelizacion',
 ]
 
