@@ -1,20 +1,3 @@
-"""
-Capa de datos "mock" del caso Tarjetas y Fidelización (VikingCard).
-
-Requerimiento de la Evaluación 1 (Unidad 1): el sistema todavía NO se conecta
-a una base de datos. Toda la información se carga desde archivos .json
-(carpeta `fidelizacion/mock_data/`) hacia estructuras de datos en Python
-(listas y diccionarios), tal como pide la pauta para la Fase 3
-("Datos mock: Utilización de archivos .json o estructuras de datos en
-Python... para simular temporalmente la información del sistema").
-
-Como no hay persistencia real, los "usuarios registrados" viven en la lista
-`USUARIOS` en memoria durante la ejecución del servidor: alcanza para
-demostrar el flujo completo (registro -> login -> recarga -> transacciones)
-dentro de una misma sesión de trabajo, y se reinicia cuando se reinicia el
-servidor de desarrollo. La Unidad 2 reemplazará esta capa por modelos y
-consultas reales a la base de datos.
-"""
 import json
 import random
 from datetime import date

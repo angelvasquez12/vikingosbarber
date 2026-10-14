@@ -1,11 +1,4 @@
-"""
-Rutas de la app 'fidelizacion' (VikingCard).
-
-Se usa `path()` con nombres de ruta (`name=`) para poder referenciar cada
-URL desde las plantillas mediante `{% url %}` en vez de escribir rutas
-"a mano", evitando enlaces rotos si el prefijo cambia en el futuro.
-"""
-from django.urls import path
+from django.urls import path, include
 
 from . import views
 
@@ -35,4 +28,5 @@ urlpatterns = [
         views.usuario_eliminar,
         name="usuario_eliminar",
     ),
+    #path('fidelizacion/', include('fidelizacion,urls'))
 ]
